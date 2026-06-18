@@ -723,6 +723,7 @@
   window.openCartDrawer = openCartDrawer;
   window.closeCartDrawer = closeCartDrawer;
   window.syncDrawerContact = syncDrawerContact;
+  window._getCart = function() { return cart; }; // ← أضف السطر ده
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
