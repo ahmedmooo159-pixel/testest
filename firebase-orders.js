@@ -119,7 +119,19 @@ async getOrdersByPhone(phone) {
       return [];
     }
   },
-
+  async getOrdersByPhone(phone) {
+    try {
+      var orders = await this.getOrders();
+      var clean = phone.replace(/\D/g, '');
+      return orders.filter(function(o) {
+        var op = (o.customerPhone || '').replace(/\D/g, '');
+        return op === clean;
+      });
+    } catch (err) {
+      console.error('Firebase Error:', err);
+      return [];
+    }
+  },
   listenToOrders(callback) {
 
     

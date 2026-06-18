@@ -51,8 +51,15 @@ window.addEventListener('load', function () {
       console.log('✅ الطلب وصل Firebase:', firebaseKey);
 
       // إظهار رسالة نجاح
-showOrderSuccess(orderData.orderNumber, customerPhone);
-    } catch (err) {
+<button onclick="openTrackModal('${customerPhone}')" style="
+  background:#f0f0f0; color:#800000;
+  border:none; border-radius:50px;
+  padding:0.8rem 2rem;
+  font-family:'Cairo',sans-serif;
+  font-size:1rem; font-weight:700;
+  cursor:pointer; width:100%;
+  margin-top:0.5rem;
+">📦 تابع طلبك</button>    } catch (err) {
       console.error('❌ Firebase Error:', err);
       // لو Firebase فشل، نكمل بالواتساب على طول
     }
