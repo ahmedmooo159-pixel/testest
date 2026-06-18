@@ -1,19 +1,18 @@
 /**
  * ═══════════════════════════════════════════════════════════
  *  ملف البيانات — تم إنشاؤه من لوحة التحكم Admin Panel
- *  Restaurant: لذة الملوك
+ *  Restaurant: موقع اختباري
  * ═══════════════════════════════════════════════════════════
  */
 
 const MENU_DATA = {
   restaurant: {
-    name: "لذة الملوك",
-    nameEn: "Lazat Al-Molouk",
-    welcome: "فطائر - بيتزا - باستا",
-    tagline: "لما البيتزا تبقى تحفة فنية مش مجرد أكلة",
-    logo: "assets/logo/logo.jpeg",
-    phones: ["01034356136", "01123889069", "01034352138"],
-    address: "سوق المنطقة السابعة بجوار ماركت أبو غزالة",
+    name: "موقع اختباري",
+    nameEn: "test",
+    welcome: "########",
+    tagline: "############",
+    phones: ["1111111111111", "222222222222", "333333333333"],
+    address: "مول سايلو",
     deliveryNote: "أسرع دليفرى في مصر",
   },
   categories: [
@@ -260,8 +259,8 @@ const MENU_DATA = {
 };
 
 const SOCIAL_LINKS = {
-  whatsapp: "https://wa.me/201034352138",
-  facebook: "https://www.facebook.com/share/1C3DDVYQsx/?mibextid=wwXIfr",
+  whatsapp: "",
+  facebook: "",
 };
 
 /**
@@ -269,7 +268,7 @@ const SOCIAL_LINKS = {
  * عدّل active إلى false لإخفاء البانر تلقائياً.
  */
 const DAILY_OFFER = {
-  active: true,
+  active: false,
   title: "خش توقع نتيجة مباراة منتخبنا على الفيس بتاعنا ونفذ الشروط عشان تكسب العرض معانا",
   item: "كريب على مزاجك",
   oldPrice: 0,
