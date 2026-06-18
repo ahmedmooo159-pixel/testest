@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | لذة الملوك</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --maroon: #800000;
+  --maroon-dark: #5c0000;
+  --maroon-light: #a02020;
+  --gold: #c9a227;
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --text: #1e1e1e;
+  --text-muted: #666;
+  --border: #e2dbd4;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --transition: 0.2s ease;
+  --sidebar-w: 260px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:inherit;}
+a{text-decoration:none;color:inherit;}
+
+/* ── LOGIN ── */
+#login-screen{
+  position:fixed;inset:0;background:linear-gradient(135deg,var(--maroon-dark),var(--maroon));
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+}
+.login-box{
+  background:#fff;border-radius:20px;padding:2.5rem 2rem;width:340px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.login-logo{
+  width:80px;height:80px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--maroon);margin:0 auto 1rem;display:block;
+}
+.login-title{font-size:1.4rem;font-weight:800;color:var(--maroon-dark);margin-bottom:.3rem;}
+.login-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;}
+.login-input{
+  width:100%;padding:.8rem 1rem;border:2px solid var(--border);border-radius:var(--radius-sm);
+  font-size:1.1rem;text-align:center;letter-spacing:.3em;margin-bottom:1rem;
+  transition:border-color var(--transition);outline:none;
+}
+.login-input:focus{border-color:var(--maroon);}
+.login-btn{
+  width:100%;padding:.9rem;background:var(--maroon);color:#fff;border-radius:var(--radius-sm);
+  font-size:1rem;font-weight:700;transition:background var(--transition);
+}
+.login-btn:hover{background:var(--maroon-dark);}
+.login-error{color:#c00;font-size:.85rem;margin-top:.5rem;min-height:1.2em;}
+
+/* ── LAYOUT ── */
+#app{display:none;height:100vh;overflow:hidden;}
+.layout{display:flex;height:100%;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);background:var(--maroon-dark);color:#fff;
+  display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;
+}
+.sidebar-logo{
+  padding:1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;gap:.75rem;
+}
+.sidebar-logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.3);}
+.sidebar-logo-text .name{font-size:.95rem;font-weight:700;}
+.sidebar-logo-text .sub{font-size:.72rem;opacity:.7;}
+.sidebar-nav{flex:1;padding:.75rem 0;}
+.nav-section-title{
+  font-size:.68rem;font-weight:700;opacity:.5;letter-spacing:.1em;
+  padding:.75rem 1.25rem .3rem;text-transform:uppercase;
+}
+.nav-item{
+  display:flex;align-items:center;gap:.65rem;padding:.7rem 1.25rem;
+  font-size:.88rem;font-weight:600;cursor:pointer;
+  transition:background var(--transition);border-radius:0;
+  color:rgba(255,255,255,.8);
+}
+.nav-item:hover{background:rgba(255,255,255,.1);color:#fff;}
+.nav-item.active{background:rgba(255,255,255,.18);color:#fff;}
+.nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:.8;}
+.nav-divider{height:1px;background:rgba(255,255,255,.08);margin:.5rem 1rem;}
+.sidebar-footer{
+  padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.1);
+  font-size:.75rem;opacity:.5;
+}
+
+/* ── MAIN CONTENT ── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-title{font-size:1.1rem;font-weight:800;color:var(--maroon-dark);}
+.topbar-actions{display:flex;gap:.5rem;align-items:center;}
+.page-content{padding:1.5rem;flex:1;}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;
+  border-radius:var(--radius-sm);font-size:.85rem;font-weight:700;
+  transition:all var(--transition);cursor:pointer;border:none;
+}
+.btn-primary{background:var(--maroon);color:#fff;}
+.btn-primary:hover{background:var(--maroon-dark);}
+.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:var(--maroon);color:var(--maroon);}
+.btn-danger{background:#fee2e2;color:#991b1b;}
+.btn-danger:hover{background:#fecaca;}
+.btn-success{background:#d1fae5;color:#065f46;}
+.btn-success:hover{background:#a7f3d0;}
+.btn-sm{padding:.4rem .75rem;font-size:.8rem;}
+.btn-icon{padding:.5rem;border-radius:var(--radius-sm);}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
+.card-header{
+  padding:1rem 1.25rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{font-size:1rem;font-weight:700;color:var(--maroon-dark);}
+.card-body{padding:1.25rem;}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.1rem 1.25rem;
+}
+.stat-label{font-size:.75rem;color:var(--text-muted);font-weight:600;margin-bottom:.35rem;}
+.stat-value{font-size:1.6rem;font-weight:800;color:var(--maroon-dark);}
+.stat-sub{font-size:.75rem;color:var(--text-muted);margin-top:.2rem;}
+
+/* ── CATEGORY TABS ── */
+.category-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.cat-tab{
+  padding:.5rem 1rem;border-radius:50px;font-size:.82rem;font-weight:700;
+  border:2px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;
+  transition:all var(--transition);
+}
+.cat-tab:hover{border-color:var(--maroon);color:var(--maroon);}
+.cat-tab.active{background:var(--maroon);border-color:var(--maroon);color:#fff;}
+
+/* ── ITEMS TABLE ── */
+.items-table{width:100%;border-collapse:collapse;}
+.items-table th{
+  background:var(--bg);font-size:.78rem;font-weight:700;color:var(--text-muted);
+  padding:.7rem 1rem;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;
+}
+.items-table td{
+  padding:.8rem 1rem;border-bottom:1px solid var(--border);
+  font-size:.85rem;vertical-align:middle;
+}
+.items-table tr:last-child td{border-bottom:none;}
+.items-table tr:hover td{background:rgba(128,0,0,.03);}
+.item-img{
+  width:48px;height:48px;border-radius:8px;object-fit:cover;
+  background:#f0ebe3;border:1px solid var(--border);
+}
+.item-name{font-weight:700;color:var(--maroon-dark);}
+.item-name-en{font-size:.75rem;color:var(--text-muted);}
+.price-badge{
+  display:inline-block;background:rgba(128,0,0,.07);color:var(--maroon-dark);
+  border-radius:6px;padding:.25rem .6rem;font-size:.8rem;font-weight:700;
+}
+.toggle-switch{position:relative;width:44px;height:24px;display:inline-block;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{
+  position:absolute;inset:0;background:#ccc;border-radius:999px;cursor:pointer;
+  transition:.3s;
+}
+.toggle-slider:before{
+  content:"";position:absolute;width:18px;height:18px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;transition:.3s;
+}
+.toggle-switch input:checked + .toggle-slider{background:var(--maroon);}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px);}
+.actions-cell{display:flex;gap:.4rem;align-items:center;}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-box{
+  background:var(--surface);border-radius:var(--radius);
+  width:100%;max-width:540px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.modal-head{
+  padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);
+}
+.modal-head h3{font-size:1rem;font-weight:800;color:var(--maroon-dark);}
+.modal-head-close{
+  width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--text);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;
+}
+.modal-head-close:hover{background:var(--border);}
+.modal-body{padding:1.25rem;}
+.modal-foot{
+  padding:1rem 1.25rem;border-top:1px solid var(--border);
+  display:flex;gap:.75rem;justify-content:flex-end;
+}
+
+/* ── FORM ── */
+.form-group{margin-bottom:1rem;}
+.form-label{display:block;font-size:.82rem;font-weight:700;color:var(--text-muted);margin-bottom:.4rem;}
+.form-input{
+  width:100%;padding:.7rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-size:.9rem;outline:none;transition:border-color var(--transition);
+}
+.form-input:focus{border-color:var(--maroon);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;}
+.price-type-toggle{display:flex;gap:.5rem;margin-bottom:.75rem;}
+.price-type-btn{
+  flex:1;padding:.5rem;border:2px solid var(--border);border-radius:var(--radius-sm);
+  font-size:.8rem;font-weight:700;cursor:pointer;transition:all var(--transition);background:var(--bg);
+}
+.price-type-btn.active{background:var(--maroon);border-color:var(--maroon);color:#fff;}
+
+/* ── IMAGE UPLOAD ── */
+.img-upload-area{
+  border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1.5rem;
+  text-align:center;cursor:pointer;transition:border-color var(--transition);
+}
+.img-upload-area:hover{border-color:var(--maroon);}
+.img-upload-area.has-image{border-style:solid;border-color:var(--maroon);}
+.img-preview{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:0 auto .5rem;display:block;}
+.img-upload-text{font-size:.8rem;color:var(--text-muted);}
+
+/* ── SEARCH ── */
+.search-bar{
+  position:relative;margin-bottom:1rem;
+}
+.search-bar input{
+  width:100%;padding:.65rem 1rem .65rem 2.5rem;border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);font-size:.88rem;outline:none;transition:border-color var(--transition);
+}
+.search-bar input:focus{border-color:var(--maroon);}
+.search-bar svg{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);}
+
+/* ── RESTAURANT INFO FORM ── */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text-muted);}
+.empty-state svg{margin:0 auto 1rem;opacity:.3;}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
+  background:var(--maroon-dark);color:#fff;padding:.8rem 1.25rem;border-radius:var(--radius-sm);
+  font-size:.88rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.25);
+  transform:translateY(100px);opacity:0;transition:all .3s ease;pointer-events:none;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{background:#065f46;}
+#toast.error{background:#991b1b;}
+
+/* ── CONFIRM DIALOG ── */
+.confirm-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+}
+.confirm-box{
+  background:#fff;border-radius:var(--radius);padding:1.5rem;width:320px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;
+}
+.confirm-box h4{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--maroon-dark);}
+.confirm-box p{font-size:.85rem;color:var(--text-muted);margin-bottom:1.25rem;}
+.confirm-actions{display:flex;gap:.75rem;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .sidebar{width:220px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-row,.form-row-3,.info-grid{grid-template-columns:1fr;}
+}
+@media(max-width:520px){
+  .sidebar{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="assets/logo/logo.jpeg" alt="لوجو" class="login-logo" onerror="this.style.background='#800000';this.removeAttribute('src')">
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">لذة الملوك — للمشغّل فقط</div>
+    <input type="password" class="login-input" id="pw-input" placeholder="● ● ● ●" maxlength="10">
+    <button class="login-btn" onclick="doLogin()">دخول</button>
+    <div class="login-error" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="assets/logo/logo.jpeg" alt="لوجو" onerror="this.style.background='rgba(255,255,255,.2)';this.removeAttribute('src')">
+    <div class="sidebar-logo-text">
+      <div class="name">لذة الملوك</div>
+      <div class="sub">لوحة التحكم</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">الإدارة</div>
+    <div class="nav-item active" onclick="switchPage('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      الرئيسية
+    </div>
+    <div class="nav-item" onclick="switchPage('menu',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+      إدارة المنيو
+    </div>
+    <div class="nav-item" onclick="switchPage('categories',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      الأقسام
+    </div>
+    <div class="nav-item" onclick="switchPage('offer',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 11 4H4v7l9.59 9.59a2 2 0 0 0 2.82 0l4.18-4.18a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      عرض اليوم
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-section-title">الإعدادات</div>
+    <div class="nav-item" onclick="switchPage('restaurant',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      بيانات المطعم
+    </div>
+    <div class="nav-item" onclick="switchPage('export',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      تصدير data.js
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-item" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      خروج
+    </div>
+  </nav>
+  <div class="sidebar-footer">v2.0 — محمي بكلمة مرور</div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">الرئيسية</div>
+    <div class="topbar-actions" id="topbar-actions"></div>
+  </div>
+  <div class="page-content" id="page-content"></div>
+</div>
+
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODALS container -->
+<div id="modals"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   DATA — loaded from MENU_DATA global
+═══════════════════════════════════════ */
+let adminData = null;
+
+function loadData() {
+  if (typeof MENU_DATA !== 'undefined') {
+    adminData = JSON.parse(JSON.stringify(MENU_DATA));
+    const saved = localStorage.getItem('admin_menu_data');
+    if (saved) {
+      try { adminData = JSON.parse(saved); } catch(e){}
+    }
+  } else {
+    const saved = localStorage.getItem('admin_menu_data');
+    if (saved) {
+      try { adminData = JSON.parse(saved); } catch(e){ adminData = makeEmptyData(); }
+    } else {
+      adminData = makeEmptyData();
+    }
+  }
+}
+
+function makeEmptyData() {
+  return {
+    restaurant:{ name:'لذة الملوك', nameEn:'', welcome:'', tagline:'', logo:'assets/logo/logo.jpeg', phones:[], address:'', deliveryNote:'' },
+    categories:[]
+  };
+}
+
+function saveData() {
+  localStorage.setItem('admin_menu_data', JSON.stringify(adminData));
+}
+
+/* ═══════════════════════════════════════
+   AUTH
+═══════════════════════════════════════ */
+const PASS = '1595';
+
+function doLogin() {
+  const v = document.getElementById('pw-input').value;
+  if (v === PASS) {
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadData();
+    switchPage('dashboard');
+  } else {
+    const e = document.getElementById('login-err');
+    e.textContent='كلمة المرور غلط، حاول تاني';
+    setTimeout(()=>e.textContent='',2500);
+    document.getElementById('pw-input').value='';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter') {
+    if (document.getElementById('login-screen').style.display!=='none') doLogin();
+  }
+});
+
+function doLogout() {
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('pw-input').value='';
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+const pages = { dashboard:pageDashboard, menu:pageMenu, categories:pageCategories, offer:pageOffer, restaurant:pageRestaurant, export:pageExport };
+const pageTitles = { dashboard:'الرئيسية', menu:'إدارة المنيو', categories:'إدارة الأقسام', offer:'عرض اليوم', restaurant:'بيانات المطعم', export:'تصدير data.js' };
+
+function switchPage(name, navEl) {
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('topbar-title').textContent = pageTitles[name]||name;
+  document.getElementById('topbar-actions').innerHTML='';
+  document.getElementById('page-content').innerHTML='';
+  pages[name]&&pages[name]();
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+let toastTimer=null;
+function toast(msg, type='success') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+(type||'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{ t.className=''; },2500);
+}
+
+/* ═══════════════════════════════════════
+   CONFIRM DIALOG
+═══════════════════════════════════════ */
+function confirm2(msg, onYes) {
+  const overlay=document.createElement('div');
+  overlay.className='confirm-overlay';
+  overlay.innerHTML=`
+    <div class="confirm-box">
+      <h4>تأكيد الحذف</h4>
+      <p>${msg}</p>
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" style="flex:1" id="cfn-no">إلغاء</button>
+        <button class="btn btn-danger" style="flex:1" id="cfn-yes">حذف</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#cfn-no').onclick=()=>overlay.remove();
+  overlay.querySelector('#cfn-yes').onclick=()=>{ overlay.remove(); onYes(); };
+}
+
+/* ═══════════════════════════════════════
+   MODAL HELPERS
+═══════════════════════════════════════ */
+function openModal(title, bodyHtml, footHtml) {
+  closeModal();
+  const wrap=document.createElement('div');
+  wrap.id='active-modal';
+  wrap.className='modal-overlay';
+  wrap.innerHTML=`
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>${title}</h3>
+        <button class="modal-head-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">${bodyHtml}</div>
+      <div class="modal-foot">${footHtml}</div>
+    </div>`;
+  document.getElementById('modals').appendChild(wrap);
+  wrap.addEventListener('click', e=>{ if(e.target===wrap) closeModal(); });
+}
+function closeModal() {
+  const m=document.getElementById('active-modal');
+  if(m) m.remove();
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function genId(prefix='item') {
+  return prefix+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+}
+
+function formatPrice(item) {
+  if (item.prices) {
+    const p=[];
+    if(item.prices.S!=null) p.push('ص:'+item.prices.S);
+    if(item.prices.M!=null) p.push('و:'+item.prices.M);
+    if(item.prices.L!=null) p.push('ك:'+item.prices.L);
+    return p.join(' | ')+' ج.م';
+  }
+  return item.price!=null ? item.price+' ج.م' : 'اسأل';
+}
+
+function getCatName(cat) { return cat.nameAr||cat.name; }
+
+function totalItems() {
+  return adminData.categories.reduce((s,c)=>s+(c.items||[]).length,0);
+}
+
+function hiddenItems() {
+  return adminData.categories.reduce((s,c)=>s+(c.items||[]).filter(i=>i.available===false).length,0);
+}
+
+/* ═══════════════════════════════════════
+   PAGE: DASHBOARD
+═══════════════════════════════════════ */
+function pageDashboard() {
+  const c=adminData.categories.length;
+  const items=totalItems();
+  const hidden=hiddenItems();
+  document.getElementById('page-content').innerHTML=`
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">إجمالي الأقسام</div>
+        <div class="stat-value">${c}</div>
+        <div class="stat-sub">قسم في المنيو</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">إجمالي الأصناف</div>
+        <div class="stat-value">${items}</div>
+        <div class="stat-sub">صنف في المنيو</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">أصناف مخفية</div>
+        <div class="stat-value" style="color:${hidden?'#991b1b':'#065f46'}">${hidden}</div>
+        <div class="stat-sub">غير متاح للعملاء</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">الأصناف المتاحة</div>
+        <div class="stat-value" style="color:#065f46">${items-hidden}</div>
+        <div class="stat-sub">ظاهر للعملاء</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">الأقسام وعدد أصنافها</div>
+        <button class="btn btn-primary btn-sm" onclick="switchPage('menu');document.querySelectorAll('.nav-item')[1].classList.add('active');document.querySelectorAll('.nav-item')[0].classList.remove('active')">إدارة المنيو</button>
+      </div>
+      <div class="card-body">
+        <table class="items-table">
+          <thead><tr><th>اسم القسم</th><th>الاسم بالعربي</th><th>عدد الأصناف</th><th>المتاح</th></tr></thead>
+          <tbody>
+            ${adminData.categories.map(cat=>{
+              const av=(cat.items||[]).filter(i=>i.available!==false).length;
+              const tot=(cat.items||[]).length;
+              return `<tr>
+                <td>${cat.name}</td>
+                <td>${cat.nameAr||'—'}</td>
+                <td><span class="price-badge">${tot}</span></td>
+                <td><span style="color:${av<tot?'#991b1b':'#065f46'};font-weight:700">${av}/${tot}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════
+   PAGE: MENU MANAGEMENT
+═══════════════════════════════════════ */
+let activeMenuCat = null;
+let menuSearchQ = '';
+
+function pageMenu() {
+  if (!adminData.categories.length) {
+    document.getElementById('page-content').innerHTML=`<div class="empty-state"><p>لا توجد أقسام. أضف قسماً أولاً من صفحة "الأقسام".</p></div>`;
+    return;
+  }
+  if (!activeMenuCat) activeMenuCat=adminData.categories[0].id;
+
+  document.getElementById('topbar-actions').innerHTML=`
+    <button class="btn btn-primary btn-sm" onclick="openAddItemModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      إضافة صنف
+    </button>`;
+
+  renderMenuPage();
+}
+
+function renderMenuPage() {
+  const pc=document.getElementById('page-content');
+  const cat=adminData.categories.find(c=>c.id===activeMenuCat);
+  if(!cat){activeMenuCat=adminData.categories[0]?.id; renderMenuPage(); return;}
+
+  let items=(cat.items||[]);
+  if(menuSearchQ) items=items.filter(i=>(i.name||'').includes(menuSearchQ)||(i.nameEn||'').toLowerCase().includes(menuSearchQ.toLowerCase()));
+
+  pc.innerHTML=`
+    <div class="category-tabs" id="cat-tabs">
+      ${adminData.categories.map(c=>`
+        <div class="cat-tab ${c.id===activeMenuCat?'active':''}" onclick="setMenuCat('${c.id}')">
+          ${getCatName(c)} <span style="font-size:.72rem;opacity:.7">(${(c.items||[]).length})</span>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${getCatName(cat)} — ${items.length} صنف</div>
+        <div style="display:flex;gap:.5rem;align-items:center;">
+          <div class="search-bar" style="margin:0;width:220px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" placeholder="بحث في الأصناف..." value="${menuSearchQ}" oninput="menuSearchQ=this.value;renderMenuPage()" style="padding:.55rem .9rem .55rem 2.2rem">
+          </div>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>الصورة</th>
+              <th>اسم الصنف</th>
+              <th>الوصف</th>
+              <th>السعر</th>
+              <th>متاح</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.length===0 ? `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted)">لا توجد أصناف</td></tr>` :
+              items.map(item=>`
+              <tr>
+                <td>
+                  <img class="item-img" src="${item.image||'assets/images/placeholder.svg'}" alt="${item.name}"
+                    onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'48\\' height=\\'48\\'><rect width=\\'48\\' height=\\'48\\' fill=\\'%23f0ebe3\\'/></svg>'">
+                </td>
+                <td>
+                  <div class="item-name">${item.name||''}</div>
+                  <div class="item-name-en">${item.nameEn||''}</div>
+                </td>
+                <td style="max-width:160px;font-size:.8rem;color:var(--text-muted)">${item.description||'—'}</td>
+                <td><span class="price-badge">${formatPrice(item)}</span></td>
+                <td>
+                  <label class="toggle-switch">
+                    <input type="checkbox" ${item.available!==false?'checked':''} onchange="toggleAvailable('${cat.id}','${item.id}',this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </td>
+                <td>
+                  <div class="actions-cell">
+                    <button class="btn btn-secondary btn-sm btn-icon" title="تعديل" onclick="openEditItemModal('${cat.id}','${item.id}')">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-icon" title="حذف" onclick="deleteItem('${cat.id}','${item.id}')">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function setMenuCat(id) {
+  activeMenuCat=id; menuSearchQ=''; renderMenuPage();
+}
+
+function toggleAvailable(catId, itemId, val) {
+  const cat=adminData.categories.find(c=>c.id===catId);
+  if(!cat) return;
+  const item=cat.items.find(i=>i.id===itemId);
+  if(!item) return;
+  item.available=val;
+  saveData();
+  toast(val?'الصنف أصبح متاحاً ✓':'الصنف أصبح مخفياً');
+}
+
+function deleteItem(catId, itemId) {
+  confirm2('هل تريد حذف هذا الصنف نهائياً؟', ()=>{
+    const cat=adminData.categories.find(c=>c.id===catId);
+    if(!cat) return;
+    cat.items=cat.items.filter(i=>i.id!==itemId);
+    saveData();
+    renderMenuPage();
+    toast('تم الحذف','success');
+  });
+}
+
+/* ── ITEM FORM ── */
+function itemFormHTML(item, catId) {
+  const cats=adminData.categories;
+  const hasPrices=item&&item.prices;
+  const priceType=hasPrices?'multi':'single';
+  return `
+    <div class="form-group">
+      <label class="form-label">القسم</label>
+      <select class="form-input" id="f-cat">
+        ${cats.map(c=>`<option value="${c.id}" ${(catId&&c.id===catId)||(!catId&&c.id===activeMenuCat)?'selected':''}>${getCatName(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">اسم الصنف (عربي) *</label>
+        <input class="form-input" id="f-name" type="text" value="${item?.name||''}" placeholder="مثال: بيتزا مارجريتا">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الاسم (إنجليزي)</label>
+        <input class="form-input" id="f-nameen" type="text" value="${item?.nameEn||''}" placeholder="Margherita">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">الوصف (اختياري)</label>
+      <input class="form-input" id="f-desc" type="text" value="${item?.description||''}" placeholder="موتزاريلا، صوص، خضار">
+    </div>
+    <div class="form-group">
+      <label class="form-label">نوع السعر</label>
+      <div class="price-type-toggle">
+        <button type="button" class="price-type-btn ${priceType==='single'?'active':''}" id="pt-single" onclick="setPriceType('single')">سعر واحد</button>
+        <button type="button" class="price-type-btn ${priceType==='multi'?'active':''}" id="pt-multi" onclick="setPriceType('multi')">مقاسات (ص/و/ك)</button>
+      </div>
+      <div id="price-single" style="${priceType==='multi'?'display:none':''}">
+        <input class="form-input" id="f-price" type="number" min="0" value="${item?.price!=null?item.price:''}" placeholder="السعر بالجنيه">
+      </div>
+      <div id="price-multi" style="${priceType==='single'?'display:none':''}">
+        <div class="form-row-3">
+          <div>
+            <label class="form-label">صغير (ص)</label>
+            <input class="form-input" id="f-ps" type="number" min="0" value="${item?.prices?.S!=null?item.prices.S:''}" placeholder="سعر">
+          </div>
+          <div>
+            <label class="form-label">وسط (و)</label>
+            <input class="form-input" id="f-pm" type="number" min="0" value="${item?.prices?.M!=null?item.prices.M:''}" placeholder="سعر">
+          </div>
+          <div>
+            <label class="form-label">كبير (ك)</label>
+            <input class="form-input" id="f-pl" type="number" min="0" value="${item?.prices?.L!=null?item.prices.L:''}" placeholder="سعر">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">صورة الصنف</label>
+      <div class="img-upload-area ${item?.image?'has-image':''}" id="img-drop-area" onclick="document.getElementById('f-img-file').click()">
+        ${item?.image ? `<img class="img-preview" id="img-preview-el" src="${item.image}" alt="صورة" onerror="this.style.display='none'">` : `<img class="img-preview" id="img-preview-el" src="" alt="" style="display:none">`}
+        <div class="img-upload-text">
+          <strong>اضغط لاختيار صورة</strong><br>أو اكتب مسار الصورة
+        </div>
+      </div>
+      <input type="file" id="f-img-file" accept="image/*" style="display:none" onchange="previewImg(this)">
+      <input class="form-input" id="f-img" type="text" value="${item?.image||''}" placeholder="assets/images/pizza.jpg" style="margin-top:.5rem" oninput="updateImgPreview(this.value)">
+    </div>
+    <input type="hidden" id="f-img-data" value="">
+  `;
+}
+
+function setPriceType(type) {
+  document.getElementById('price-single').style.display=type==='single'?'':'none';
+  document.getElementById('price-multi').style.display=type==='multi'?'':'none';
+  document.getElementById('pt-single').classList.toggle('active',type==='single');
+  document.getElementById('pt-multi').classList.toggle('active',type==='multi');
+}
+
+function previewImg(input) {
+  if(!input.files||!input.files[0]) return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    document.getElementById('f-img-data').value=data;
+    document.getElementById('f-img').value='';
+    const prev=document.getElementById('img-preview-el');
+    prev.src=data; prev.style.display='block';
+    document.getElementById('img-drop-area').classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateImgPreview(src) {
+  const prev=document.getElementById('img-preview-el');
+  if(!src){prev.style.display='none';return;}
+  prev.src=src; prev.style.display='block';
+}
+
+function collectItemForm() {
+  const name=(document.getElementById('f-name').value||'').trim();
+  if(!name){toast('اسم الصنف مطلوب','error');return null;}
+  const isSingle=document.getElementById('price-single').style.display!=='none';
+  const imgData=document.getElementById('f-img-data').value;
+  const imgPath=document.getElementById('f-img').value.trim();
+  const img=imgData||imgPath||'assets/images/placeholder.svg';
+  const obj={
+    name,
+    nameEn:(document.getElementById('f-nameen').value||'').trim(),
+    description:(document.getElementById('f-desc').value||'').trim(),
+    image:img,
+    available:true
+  };
+  if(isSingle){
+    const p=parseFloat(document.getElementById('f-price').value);
+    if(!isNaN(p)) obj.price=p;
+  } else {
+    const s=document.getElementById('f-ps').value;
+    const m=document.getElementById('f-pm').value;
+    const l=document.getElementById('f-pl').value;
+    obj.prices={};
+    if(s!=='') obj.prices.S=parseFloat(s);
+    if(m!=='') obj.prices.M=parseFloat(m);
+    if(l!=='') obj.prices.L=parseFloat(l);
+    if(!Object.keys(obj.prices).length){toast('أدخل سعراً واحداً على الأقل','error');return null;}
+  }
+  return { item:obj, catId:document.getElementById('f-cat').value };
+}
+
+function openAddItemModal() {
+  openModal('إضافة صنف جديد', itemFormHTML(null, activeMenuCat),
+    `<button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+     <button class="btn btn-primary" onclick="saveNewItem()">إضافة الصنف</button>`);
+}
+
+function saveNewItem() {
+  const r=collectItemForm();
+  if(!r) return;
+  const cat=adminData.categories.find(c=>c.id===r.catId);
+  if(!cat){toast('القسم مش موجود','error');return;}
+  r.item.id=genId(r.catId.split('-')[0]||'item');
+  if(!cat.items) cat.items=[];
+  cat.items.push(r.item);
+  saveData();
+  activeMenuCat=r.catId;
+  closeModal();
+  renderMenuPage();
+  toast('تم إضافة الصنف ✓','success');
+}
+
+function openEditItemModal(catId, itemId) {
+  const cat=adminData.categories.find(c=>c.id===catId);
+  if(!cat) return;
+  const item=cat.items.find(i=>i.id===itemId);
+  if(!item) return;
+  openModal('تعديل الصنف', itemFormHTML(item, catId),
+    `<button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+     <button class="btn btn-primary" onclick="saveEditItem('${catId}','${itemId}')">حفظ التعديلات</button>`);
+}
+
+function saveEditItem(catId, itemId) {
+  const r=collectItemForm();
+  if(!r) return;
+  const oldCat=adminData.categories.find(c=>c.id===catId);
+  const newCat=adminData.categories.find(c=>c.id===r.catId);
+  if(!oldCat||!newCat){toast('خطأ في القسم','error');return;}
+  const idx=oldCat.items.findIndex(i=>i.id===itemId);
+  if(idx===-1){toast('الصنف مش موجود','error');return;}
+  r.item.id=itemId;
+  r.item.available=oldCat.items[idx].available!==false;
+  if(catId===r.catId){
+    oldCat.items[idx]=r.item;
+  } else {
+    oldCat.items.splice(idx,1);
+    if(!newCat.items) newCat.items=[];
+    newCat.items.push(r.item);
+    activeMenuCat=r.catId;
+  }
+  saveData();
+  closeModal();
+  renderMenuPage();
+  toast('تم حفظ التعديلات ✓','success');
+}
+
+/* ═══════════════════════════════════════
+   PAGE: CATEGORIES
+═══════════════════════════════════════ */
+function pageCategories() {
+  document.getElementById('topbar-actions').innerHTML=`
+    <button class="btn btn-primary btn-sm" onclick="openAddCatModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      إضافة قسم
+    </button>`;
+  renderCatPage();
+}
+
+function renderCatPage() {
+  const pc=document.getElementById('page-content');
+  pc.innerHTML=`
+    <div class="card">
+      <div class="card-header"><div class="card-title">كل الأقسام (${adminData.categories.length})</div></div>
+      <div style="overflow-x:auto">
+        <table class="items-table">
+          <thead><tr><th>#</th><th>الاسم (EN)</th><th>الاسم (AR)</th><th>ملاحظة القسم</th><th>عدد الأصناف</th><th>إجراءات</th></tr></thead>
+          <tbody>
+            ${adminData.categories.length===0?`<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted)">لا توجد أقسام</td></tr>`
+            :adminData.categories.map((cat,i)=>`
+              <tr>
+                <td style="color:var(--text-muted);font-size:.8rem">${i+1}</td>
+                <td><strong>${cat.name}</strong></td>
+                <td>${cat.nameAr||'—'}</td>
+                <td style="font-size:.8rem;color:var(--text-muted);max-width:180px">${cat.note||'—'}</td>
+                <td><span class="price-badge">${(cat.items||[]).length}</span></td>
+                <td>
+                  <div class="actions-cell">
+                    <button class="btn btn-secondary btn-sm btn-icon" onclick="openEditCatModal('${cat.id}')">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-icon" onclick="deleteCat('${cat.id}')">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function catFormHTML(cat) {
+  return `
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">الاسم (إنجليزي) *</label>
+        <input class="form-input" id="cf-name" type="text" value="${cat?.name||''}" placeholder="Pizza">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الاسم (عربي) *</label>
+        <input class="form-input" id="cf-namear" type="text" value="${cat?.nameAr||''}" placeholder="البيتزا">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ملاحظة القسم (تظهر للعملاء، اختياري)</label>
+      <input class="form-input" id="cf-note" type="text" value="${cat?.note||''}" placeholder="يوجد حشو أطراف — سوسيس أو موتزاريلا">
+    </div>`;
+}
+
+function openAddCatModal() {
+  openModal('إضافة قسم جديد', catFormHTML(null),
+    `<button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+     <button class="btn btn-primary" onclick="saveNewCat()">إضافة القسم</button>`);
+}
+
+function saveNewCat() {
+  const name=(document.getElementById('cf-name').value||'').trim();
+  const nameAr=(document.getElementById('cf-namear').value||'').trim();
+  if(!name||!nameAr){toast('الاسم مطلوب','error');return;}
+  adminData.categories.push({
+    id:'cat-'+Date.now(),name,nameAr,
+    note:(document.getElementById('cf-note').value||'').trim(),
+    items:[]
+  });
+  saveData(); closeModal(); renderCatPage();
+  toast('تم إضافة القسم ✓','success');
+}
+
+function openEditCatModal(catId) {
+  const cat=adminData.categories.find(c=>c.id===catId);
+  if(!cat) return;
+  openModal('تعديل القسم', catFormHTML(cat),
+    `<button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+     <button class="btn btn-primary" onclick="saveEditCat('${catId}')">حفظ</button>`);
+}
+
+function saveEditCat(catId) {
+  const cat=adminData.categories.find(c=>c.id===catId);
+  if(!cat) return;
+  const name=(document.getElementById('cf-name').value||'').trim();
+  const nameAr=(document.getElementById('cf-namear').value||'').trim();
+  if(!name||!nameAr){toast('الاسم مطلوب','error');return;}
+  cat.name=name; cat.nameAr=nameAr;
+  cat.note=(document.getElementById('cf-note').value||'').trim();
+  saveData(); closeModal(); renderCatPage();
+  toast('تم تعديل القسم ✓','success');
+}
+
+function deleteCat(catId) {
+  const cat=adminData.categories.find(c=>c.id===catId);
+  if(!cat) return;
+  confirm2(`هل تريد حذف قسم "${getCatName(cat)}" وكل أصنافه (${(cat.items||[]).length} صنف)؟`, ()=>{
+    adminData.categories=adminData.categories.filter(c=>c.id!==catId);
+    if(activeMenuCat===catId) activeMenuCat=adminData.categories[0]?.id||null;
+    saveData(); renderCatPage();
+    toast('تم حذف القسم','success');
+  });
+}
+
+/* ═══════════════════════════════════════
+   PAGE: DAILY OFFER (عرض اليوم)
+═══════════════════════════════════════ */
+function loadDailyOffer() {
+  const fallback = { active:false, title:'عرض اليوم', item:'', oldPrice:'', newPrice:'', note:'' };
+  try {
+    const raw = localStorage.getItem('admin_daily_offer');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') return Object.assign(fallback, parsed);
+    }
+  } catch(e) {}
+  if (typeof DAILY_OFFER !== 'undefined') return Object.assign(fallback, DAILY_OFFER);
+  return fallback;
+}
+
+function saveDailyOffer(offer) {
+  localStorage.setItem('admin_daily_offer', JSON.stringify(offer));
+}
+
+function pageOffer() {
+  const offer = loadDailyOffer();
+  document.getElementById('page-content').innerHTML=`
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">عرض اليوم</div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="of-active" ${offer.active?'checked':''}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="card-body">
+        <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1.1rem;line-height:1.7">
+          فعّل المفتاح فوق عشان يظهر بانر العرض فوق المنيو مباشرة. أي تعديل هنا بيظهر فوراً في الصفحة الرئيسية.
+        </p>
+        <div class="form-group">
+          <label class="form-label">عنوان البانر</label>
+          <input class="form-input" id="of-title" type="text" value="${offer.title||''}" placeholder="عرض اليوم">
+        </div>
+        <div class="form-group">
+          <label class="form-label">اسم الصنف *</label>
+          <input class="form-input" id="of-item" type="text" value="${offer.item||''}" placeholder="بيتزا مارجريتا لارج">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">السعر القديم</label>
+            <input class="form-input" id="of-oldprice" type="number" min="0" value="${offer.oldPrice!=null?offer.oldPrice:''}" placeholder="200">
+          </div>
+          <div class="form-group">
+            <label class="form-label">السعر الجديد *</label>
+            <input class="form-input" id="of-newprice" type="number" min="0" value="${offer.newPrice!=null?offer.newPrice:''}" placeholder="150">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ملاحظة (اختياري)</label>
+          <input class="form-input" id="of-note" type="text" value="${offer.note||''}" placeholder="العرض لحد منتصف الليل">
+        </div>
+        <div style="margin-top:1.1rem;display:flex;justify-content:flex-end">
+          <button class="btn btn-primary" onclick="saveOfferForm()">حفظ العرض</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveOfferForm() {
+  const item=(document.getElementById('of-item').value||'').trim();
+  const newPriceRaw=document.getElementById('of-newprice').value;
+  const active=document.getElementById('of-active').checked;
+
+  if (active && !item) { toast('اسم الصنف مطلوب لتفعيل العرض','error'); return; }
+  if (active && newPriceRaw==='') { toast('السعر الجديد مطلوب لتفعيل العرض','error'); return; }
+
+  const oldPriceRaw=document.getElementById('of-oldprice').value;
+  const offer={
+    active,
+    title:(document.getElementById('of-title').value||'').trim()||'عرض اليوم',
+    item,
+    oldPrice: oldPriceRaw==='' ? '' : parseFloat(oldPriceRaw),
+    newPrice: newPriceRaw==='' ? '' : parseFloat(newPriceRaw),
+    note:(document.getElementById('of-note').value||'').trim(),
+  };
+  saveDailyOffer(offer);
+  toast(active?'تم تفعيل العرض ✓':'تم حفظ التعديلات (العرض متوقف)','success');
+}
+
+/* ═══════════════════════════════════════
+   PAGE: RESTAURANT INFO
+═══════════════════════════════════════ */
+function pageRestaurant() {
+  const r=adminData.restaurant||{};
+  document.getElementById('page-content').innerHTML=`
+    <div class="card">
+      <div class="card-header"><div class="card-title">بيانات المطعم</div></div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="form-group">
+            <label class="form-label">اسم المطعم (عربي) *</label>
+            <input class="form-input" id="r-name" value="${r.name||''}" placeholder="لذة الملوك">
+          </div>
+          <div class="form-group">
+            <label class="form-label">اسم المطعم (إنجليزي)</label>
+            <input class="form-input" id="r-nameen" value="${r.nameEn||''}" placeholder="Lazat Al-Molouk">
+          </div>
+          <div class="form-group">
+            <label class="form-label">نص الترحيب</label>
+            <input class="form-input" id="r-welcome" value="${r.welcome||''}" placeholder="فطائر - بيتزا - باستا">
+          </div>
+          <div class="form-group">
+            <label class="form-label">الشعار (Tagline)</label>
+            <input class="form-input" id="r-tagline" value="${r.tagline||''}" placeholder="لما البيتزا تبقى تحفة فنية">
+          </div>
+          <div class="form-group">
+            <label class="form-label">العنوان</label>
+            <input class="form-input" id="r-address" value="${r.address||''}" placeholder="سوق المنطقة السابعة...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ملاحظة التوصيل</label>
+            <input class="form-input" id="r-delivery" value="${r.deliveryNote||''}" placeholder="أسرع دليفري في مصر">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">أرقام التليفون (كل رقم في سطر)</label>
+          <textarea class="form-input" id="r-phones" rows="3" placeholder="01034356136&#10;01123889069">${(r.phones||[]).join('\n')}</textarea>
+        </div>
+        <div class="form-row" style="margin-top:.5rem">
+          <div class="form-group">
+            <label class="form-label">مسار اللوجو</label>
+            <input class="form-input" id="r-logo" value="${r.logo||''}" placeholder="assets/logo/logo.jpeg">
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+          <div class="card-title" style="margin-bottom:1rem">روابط التواصل الاجتماعي</div>
+          <div class="info-grid">
+            <div class="form-group">
+              <label class="form-label">رابط واتساب</label>
+              <input class="form-input" id="r-wa" value="${(typeof SOCIAL_LINKS!=='undefined'?SOCIAL_LINKS.whatsapp:'')||localStorage.getItem('admin_wa')||''}" placeholder="https://wa.me/201...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">رابط فيسبوك</label>
+              <input class="form-input" id="r-fb" value="${(typeof SOCIAL_LINKS!=='undefined'?SOCIAL_LINKS.facebook:'')||localStorage.getItem('admin_fb')||''}" placeholder="https://www.facebook.com/...">
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1.25rem;display:flex;justify-content:flex-end">
+          <button class="btn btn-primary" onclick="saveRestaurant()">حفظ البيانات</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveRestaurant() {
+  const r=adminData.restaurant=adminData.restaurant||{};
+  r.name=(document.getElementById('r-name').value||'').trim();
+  r.nameEn=(document.getElementById('r-nameen').value||'').trim();
+  r.welcome=(document.getElementById('r-welcome').value||'').trim();
+  r.tagline=(document.getElementById('r-tagline').value||'').trim();
+  r.address=(document.getElementById('r-address').value||'').trim();
+  r.deliveryNote=(document.getElementById('r-delivery').value||'').trim();
+  r.logo=(document.getElementById('r-logo').value||'').trim();
+  r.phones=document.getElementById('r-phones').value.split('\n').map(p=>p.trim()).filter(Boolean);
+  localStorage.setItem('admin_wa',document.getElementById('r-wa').value.trim());
+  localStorage.setItem('admin_fb',document.getElementById('r-fb').value.trim());
+  saveData();
+  toast('تم حفظ بيانات المطعم ✓','success');
+}
+
+/* ═══════════════════════════════════════
+   PAGE: EXPORT data.js
+═══════════════════════════════════════ */
+function pageExport() {
+  document.getElementById('page-content').innerHTML=`
+    <div class="card">
+      <div class="card-header"><div class="card-title">تصدير ملف data.js</div></div>
+      <div class="card-body">
+        <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.25rem;line-height:1.7">
+          بعد ما تخلص التعديلات، اضغط "توليد وتنزيل" عشان تنزل ملف <strong>data.js</strong> الجديد
+          وتحط مكان الملف القديم في المشروع بتاعك.
+        </p>
+        <button class="btn btn-primary" onclick="generateAndDownload()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          توليد وتنزيل data.js
+        </button>
+        <div style="margin-top:1.5rem">
+          <label class="form-label">معاينة الكود</label>
+          <textarea id="export-preview" class="form-input" style="font-family:monospace;font-size:.75rem;height:320px;resize:vertical;direction:ltr;text-align:left" readonly></textarea>
+        </div>
+      </div>
+    </div>`;
+  previewExport();
+}
+
+function escapeJs(str){
+  return String(str||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n');
+}
+
+function generateDataJs() {
+  const d=adminData;
+  const r=d.restaurant||{};
+  let out='/**\n * ═══════════════════════════════════════════════════════════\n';
+  out+=' *  ملف البيانات — تم إنشاؤه من لوحة التحكم Admin Panel\n';
+  out+=` *  Restaurant: ${r.name||''}\n`;
+  out+=' * ═══════════════════════════════════════════════════════════\n */\n\n';
+  out+='const MENU_DATA = {\n';
+  out+='  restaurant: {\n';
+  out+=`    name: "${escapeJs(r.name||'')}",\n`;
+  if(r.nameEn) out+=`    nameEn: "${escapeJs(r.nameEn)}",\n`;
+  if(r.welcome) out+=`    welcome: "${escapeJs(r.welcome)}",\n`;
+  if(r.tagline) out+=`    tagline: "${escapeJs(r.tagline)}",\n`;
+  if(r.logo) out+=`    logo: "${escapeJs(r.logo)}",\n`;
+  if(r.phones&&r.phones.length) out+=`    phones: [${r.phones.map(p=>`"${escapeJs(p)}"`).join(', ')}],\n`;
+  if(r.address) out+=`    address: "${escapeJs(r.address)}",\n`;
+  if(r.deliveryNote) out+=`    deliveryNote: "${escapeJs(r.deliveryNote)}",\n`;
+  out+='  },\n  categories: [\n';
+  (d.categories||[]).forEach((cat,ci)=>{
+    out+='    {\n';
+    out+=`      id: "${escapeJs(cat.id)}",\n`;
+    out+=`      name: "${escapeJs(cat.name)}",\n`;
+    out+=`      nameAr: "${escapeJs(cat.nameAr||'')}",\n`;
+    if(cat.note) out+=`      note: "${escapeJs(cat.note)}",\n`;
+    out+='      items: [\n';
+    (cat.items||[]).forEach(item=>{
+      const parts=[];
+      parts.push(`id: "${escapeJs(item.id)}"`);
+      parts.push(`name: "${escapeJs(item.name||'')}"`);
+      if(item.nameEn) parts.push(`nameEn: "${escapeJs(item.nameEn)}"`);
+      parts.push(`description: "${escapeJs(item.description||'')}"`);
+      if(item.prices&&Object.keys(item.prices).length){
+        const pp=[];
+        if(item.prices.L!=null) pp.push(`L: ${item.prices.L}`);
+        if(item.prices.M!=null) pp.push(`M: ${item.prices.M}`);
+        if(item.prices.S!=null) pp.push(`S: ${item.prices.S}`);
+        parts.push(`prices: { ${pp.join(', ')} }`);
+      } else if(item.price!=null){
+        parts.push(`price: ${item.price}`);
+      }
+      const imgVal=item.image||'assets/images/placeholder.svg';
+      if(imgVal.startsWith('data:image/')){
+        parts.push(`image: "assets/images/${escapeJs(item.id)}.jpg"`);
+      } else {
+        parts.push(`image: "${escapeJs(imgVal)}"`);
+      }
+      if(item.available===false) parts.push(`available: false`);
+      out+=`        { ${parts.join(', ')} },\n`;
+    });
+    out+='      ],\n    }';
+    out+=ci<(d.categories.length-1)?',\n':'\n';
+  });
+  out+='  ],\n};\n\n';
+  const wa=localStorage.getItem('admin_wa')||'';
+  const fb=localStorage.getItem('admin_fb')||'';
+  out+=`const SOCIAL_LINKS = {\n  whatsapp: "${escapeJs(wa)}",\n  facebook: "${escapeJs(fb)}",\n};\n\n`;
+  const offer=loadDailyOffer();
+  out+='/**\n * عرض اليوم — يظهر كبانر أسفل الهيدر مباشرة في الصفحة الرئيسية.\n * عدّل active إلى false لإخفاء البانر تلقائياً.\n */\n';
+  out+='const DAILY_OFFER = {\n';
+  out+=`  active: ${offer.active?'true':'false'},\n`;
+  out+=`  title: "${escapeJs(offer.title||'عرض اليوم')}",\n`;
+  out+=`  item: "${escapeJs(offer.item||'')}",\n`;
+  out+=`  oldPrice: ${offer.oldPrice===''||offer.oldPrice==null?0:offer.oldPrice},\n`;
+  out+=`  newPrice: ${offer.newPrice===''||offer.newPrice==null?0:offer.newPrice},\n`;
+  out+=`  note: "${escapeJs(offer.note||'')}",\n`;
+  out+='};\n';
+  return out;
+}
+
+function previewExport() {
+  const prev=document.getElementById('export-preview');
+  if(prev) prev.value=generateDataJs();
+}
+
+function generateAndDownload() {
+  const content=generateDataJs();
+  const blob=new Blob([content],{type:'text/javascript;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='data.js';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('تم تنزيل data.js ✓','success');
+}
+</script>
+
+<!-- Load site data if available -->
+<script>
+if (typeof MENU_DATA === 'undefined') {
+  const savedData = localStorage.getItem('admin_menu_data');
+}
+</script>
+<script src="data.js" onerror="console.log('data.js not found — using localStorage')"></script>
+</body>
+</html>

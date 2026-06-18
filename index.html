@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لذة الملوك | قائمة المنيو</title>
+  <meta name="description" content="قائمة بيتزا لذة الملوك — بيتزا، فطائر، باستا، كريب، وحواوشي إسكندراني. اطلب الآن!">
+  <meta name="theme-color" content="#800000">
+  <meta property="og:title" content="لذة الملوك | قائمة المنيو">
+  <meta property="og:description" content="فطائر - بيتزا - باستا — لما البيتزا تبقى تحفة فنية مش مجرد أكلة">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/logo/logo.jpeg">
+  <meta property="og:locale" content="ar_EG">
+  <link rel="icon" href="./assets/logo/logo.jpeg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:wght@600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+  <!-- شاشة التحميل -->
+  <div id="loader" class="loader" aria-hidden="true" role="status">
+    <div class="loader-inner">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">جاري تحميل المنيو(استنى متستعجلش)...</p>
+    </div>
+  </div>
+
+  <!-- الهيدر -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <img src="assets/logo/logo.jpeg" alt="شعار بيتزا لذة الملوك" class="logo" width="90" height="90" loading="lazy" decoding="async">
+      <div class="header-text">
+        <h1 id="restaurant-name">لذة الملوك</h1>
+        <p id="welcome-text" class="welcome"></p>
+        <p id="tagline" class="tagline"></p>
+        <div class="header-meta">
+          <p id="phones" class="phones"></p>
+          <p id="address" class="address"></p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- بانر عرض اليوم -->
+  <div id="daily-offer-banner" class="daily-offer-banner hidden" role="note">
+    <div class="container daily-offer-inner">
+      <span class="daily-offer-badge" id="daily-offer-title">🔥 عرض اليوم</span>
+      <span class="daily-offer-item" id="daily-offer-item"></span>
+      <span class="daily-offer-prices">
+        <span class="daily-offer-old-price" id="daily-offer-old-price"></span>
+        <span class="daily-offer-new-price" id="daily-offer-new-price"></span>
+      </span>
+      <span class="daily-offer-note" id="daily-offer-note"></span>
+    </div>
+  </div>
+
+  <!-- التنقل اللاصق -->
+  <div class="sticky-nav-wrapper">
+    <div class="container sticky-nav-inner">
+      <div class="search-bar">
+        <label for="search-input" class="visually-hidden">ابحث في المنيو</label>
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="search-input" placeholder="ابحث عن صنف..." autocomplete="off" enterkeyhint="search">
+      </div>
+      <nav class="category-nav" id="category-nav" aria-label="أقسام المنيو"></nav>
+    </div>
+  </div>
+
+  <main id="menu-main" class="container">
+    <div id="category-note" class="category-note hidden" role="note"></div>
+    <section id="menu-grid" class="menu-grid" aria-live="polite"></section>
+    <div id="empty-state" class="empty-state hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M7 11v8M17 11v8"/></svg>
+      <p>لا توجد أصناف في هذا القسم</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <div class="footer-socials" aria-label="روابط التواصل الاجتماعي">
+        <div class="footer-logo-group">
+          <img src="assets/logo/Gemini_Generated_Image_mei2b0mei2b0mei2.png" alt="لوجو الموقع" class="footer-logo" width="50" height="50" loading="lazy" decoding="async">
+          <span class="footer-logo-text">تابعنا على</span>
+        </div>
+        <a href="https://wa.me/201091728680" id="footer-whatsapp-link" class="footer-logo-icon whatsapp" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+        </a>
+        <a href="https://www.facebook.com/share/1chNVD18vN/?mibextid=wwXIfr" id="footer-facebook-link" class="footer-logo-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+      <p>&copy; <span id="year"></span> <span id="footer-name">AHMED MOURAD</span>. جميع الحقوق محفوظة لدى احمد مراد</p>
+      <p class="footer-note">01091728680</p>
+    </div>
+    <div class="developer-credit">
+      <img src="assets/logo/Gemini_Generated_Image_mei2b0mei2b0mei2.png" alt="AHMED MOURAD" class="developer-logo" width="40" height="40" loading="lazy" decoding="async">
+      <p>تم تطوير الموقع بواسطة <strong>AHMED MOURAD</strong></p>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/201034352138" id="whatsapp-btn" class="fab fab-whatsapp ripple-btn" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  </a>
+
+  <a href="https://www.facebook.com/share/1EJoeVnCjk/?mibextid=wwXIfr" id="facebook-btn" class="fab fab-facebook ripple-btn" target="_blank" rel="noopener noreferrer" aria-label="تابعنا على فيسبوك">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+  </a>
+
+  <button type="button" id="back-to-top" class="back-to-top ripple-btn" aria-label="العودة للأعلى">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
+  <div id="cart-bar" class="cart-bar" aria-live="polite">
+    <div class="cart-details" id="cart-bar-summary" style="cursor:pointer;" onclick="openCartDrawer()" title="عرض السلة">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex-shrink:0"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>سلة الطلبات:</span>
+      <strong id="cart-count">0</strong>
+      <span>عنصر ·</span>
+      <strong id="cart-total">0</strong>
+      <span>ج.م</span>
+      <span style="font-size:0.8rem;opacity:0.8;margin-right:4px;">← اضغط للعرض</span>
+    </div>
+    <div class="cart-contact">
+      <label for="user-contact">رقم التواصل (عادي براحتك كده كده هتتحول على الواتس )</label>
+      <input id="user-contact" type="tel" placeholder="ادخل رقم العميل" inputmode="tel" />
+    </div>
+    <div class="cart-actions-footer">
+      <button type="button" class="btn-clear-cart ripple-btn" onclick="clearCart()">حذف السلة</button>
+      <button type="button" class="btn-whatsapp ripple-btn" onclick="sendOrderToWhatsApp()">تأكيد الطلب</button>
+    </div>
+  </div>
+
+  <!-- Drawer السلة -->
+  <div id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-label="سلة الطلبات" style="display:none;">
+    <div class="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+    <div class="cart-drawer-panel">
+      <div class="cart-drawer-header">
+        <h2>🛒 سلة الطلبات</h2>
+        <button type="button" class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="إغلاق">×</button>
+      </div>
+      <div class="cart-drawer-body" id="cart-drawer-body">
+        <!-- يتم ملؤها ديناميكياً -->
+      </div>
+      <div class="cart-drawer-footer" id="cart-drawer-footer" style="display:none;">
+        <div class="cart-drawer-total">
+          <span>الإجمالي:</span>
+          <strong id="cart-drawer-total-value">0 ج.م</strong>
+        </div>
+        <div class="cart-contact">
+          <label for="user-contact-drawer">رقم التواصل</label>
+          <input id="user-contact-drawer" type="tel" placeholder="ادخل رقم العميل" inputmode="tel" />
+        </div>
+        <div class="cart-drawer-actions">
+          <button type="button" class="btn-clear-cart ripple-btn" onclick="clearCart();closeCartDrawer();">حذف السلة</button>
+          <button type="button" class="btn-whatsapp ripple-btn" onclick="syncDrawerContact();sendOrderToWhatsApp();">تأكيد الطلب عبر واتساب</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- مربع حوار خيارات التوصيل والملاحظات -->
+  <div id="delivery-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeDeliveryModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>تفاصيل الطلب</h2>
+        <button type="button" class="modal-close" onclick="closeDeliveryModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="delivery-options">
+          <label class="option-label">
+            <input type="radio" name="delivery-type" value="delivery" checked>
+            <span class="option-radio"></span>
+            <span class="option-text"> توصيل للمنزل</span>
+          </label>
+          <label class="option-label">
+            <input type="radio" name="delivery-type" value="pickup">
+            <span class="option-radio"></span>
+            <span class="option-text"> استلام من المطعم</span>
+          </label>
+        </div>
+
+        <div class="notes-section">
+          <label for="order-notes">الملاحظات (اختياري):</label>
+          <textarea 
+            id="order-notes" 
+            class="notes-textarea" 
+            placeholder="أضف أي ملاحظات خاصة بطلبك (شوف نفسك في ايه وهنعملهولك)" 
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeDeliveryModal()">إلغاء</button>
+        <button type="button" class="btn-confirm" onclick="confirmOrderToWhatsApp()">تأكيد الطلب</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- مربع حوار اختيار المنطقة -->
+  <div id="area-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeAreaModal()"></div>
+    <div class="modal-content area-modal-content">
+      <div class="modal-header">
+        <h2>📍 اختر منطقتك</h2>
+        <button type="button" class="modal-close" onclick="closeAreaModal()">×</button>
+      </div>
+      <div class="modal-body area-modal-body">
+        <p class="area-modal-subtitle">اختر المنطقة عشان نحسبلك رسوم التوصيل</p>
+        <div class="area-grid">
+          <button type="button" class="area-btn" data-area="المنطقة 1" data-fee="30">المنطقة 1</button>
+          <button type="button" class="area-btn" data-area="المنطقة 2" data-fee="30">المنطقة 2</button>
+          <button type="button" class="area-btn" data-area="المنطقة 3" data-fee="30">المنطقة 3</button>
+          <button type="button" class="area-btn" data-area="المنطقة 4" data-fee="30">المنطقة 4</button>
+          <button type="button" class="area-btn" data-area="المنطقة 5" data-fee="30">المنطقة 5</button>
+          <button type="button" class="area-btn" data-area="المنطقة 6" data-fee="30">المنطقة 6</button>
+          <button type="button" class="area-btn" data-area="المنطقة 7" data-fee="30">المنطقة 7</button>
+          <button type="button" class="area-btn" data-area="المنطقة 8" data-fee="30">المنطقة 8</button>
+          <button type="button" class="area-btn" data-area="المنطقة 9" data-fee="30">المنطقة 9</button>
+          <button type="button" class="area-btn" data-area="المنطقة 10" data-fee="30">المنطقة 10</button>
+          <button type="button" class="area-btn" data-area="المنطقة 11" data-fee="30">المنطقة 11</button>
+          <button type="button" class="area-btn" data-area="المنطقة 12" data-fee="30">المنطقة 12</button>
+          <button type="button" class="area-btn" data-area="المنطقة 13" data-fee="30">المنطقة 13</button>
+          <button type="button" class="area-btn" data-area="المنطقة 14" data-fee="30">المنطقة 14</button>
+          <button type="button" class="area-btn" data-area="المنطقة 15" data-fee="30">المنطقة 15</button>
+          <button type="button" class="area-btn" data-area="المنطقة 16" data-fee="30">المنطقة 16</button>
+          <button type="button" class="area-btn" data-area="أبني بيتك الأولى" data-fee="30">أبني بيتك الأولى</button>
+          <button type="button" class="area-btn" data-area="أبني بيتك الثانية" data-fee="30">أبني بيتك الثانية</button>
+          <button type="button" class="area-btn" data-area="أبني بيتك الثالث" data-fee="30">أبني بيتك الثالث</button>
+          <button type="button" class="area-btn" data-area="دار مصر" data-fee="30">دار مصر</button>
+          <button type="button" class="area-btn area-btn--far" data-area="المنطقة 22" data-fee="45">المنطقة 22</button>
+          <button type="button" class="area-btn area-btn--far" data-area="المنطقة 23" data-fee="45">المنطقة 23</button>
+          <button type="button" class="area-btn area-btn--far" data-area="المنطقة 25" data-fee="45">المنطقة 25</button>
+        </div>
+        <div class="area-fee-legend">
+          <span class="fee-badge fee-badge--30">🚗 ديليفري 30 ج.م</span>
+          <span class="fee-badge fee-badge--45">🚗 ديليفري 45 ج.م</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeAreaModal()">رجوع</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="animations.js"></script>
+  <script>
+    function openDeliveryModal() {
+      const modal = document.getElementById('delivery-modal');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDeliveryModal() {
+      const modal = document.getElementById('delivery-modal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function openAreaModal() {
+      const modal = document.getElementById('area-modal');
+      modal.style.display = 'flex';
+    }
+
+    function closeAreaModal() {
+      const modal = document.getElementById('area-modal');
+      modal.style.display = 'none';
+    }
+
+    // ربط أزرار المناطق
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.area-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var area = this.dataset.area;
+          var fee = parseInt(this.dataset.fee, 10);
+          closeAreaModal();
+          if (window.finalizeOrderWithArea) {
+            window.finalizeOrderWithArea(area, fee);
+          }
+        });
+      });
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeDeliveryModal();
+        closeAreaModal();
+        if (window.closeCartDrawer) window.closeCartDrawer();
+      }
+    });
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>
