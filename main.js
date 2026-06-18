@@ -75,7 +75,6 @@
 
   function getAvailableSizes(item) {
     if (!item.prices) return [];
-
     return ["S", "M", "L"].filter(function (size) {
       return item.prices[size] != null;
     });
@@ -97,7 +96,6 @@
   function getItemDisplayName(item, category) {
     var categoryLabel = category ? getCategoryLabel(category) : "";
     var baseName = item.name || "";
-
     if (!categoryLabel) return baseName;
     return categoryLabel + " - " + baseName;
   }
@@ -124,19 +122,16 @@
     return 0;
   }
 
-
   function addToCart(id, name, price, options) {
     var itemKey = options && options.key ? options.key : id;
     var existing = cart.find(function (entry) {
       return entry.key === itemKey;
     });
-
     if (existing) {
       existing.quantity += 1;
     } else {
       cart.push({ id: id, key: itemKey, name: name, price: price || 0, quantity: 1 });
     }
-
     updateCartUI();
   }
 
@@ -148,24 +143,16 @@
       return sum + (item.price || 0) * item.quantity;
     }, 0);
 
-    if (els.cartCount) {
-      els.cartCount.textContent = count;
-    }
-    if (els.cartTotal) {
-      els.cartTotal.textContent = total;
-    }
-    if (els.cartBar) {
-      els.cartBar.classList.toggle("active", count > 0);
-    }
+    if (els.cartCount) els.cartCount.textContent = count;
+    if (els.cartTotal) els.cartTotal.textContent = total;
+    if (els.cartBar) els.cartBar.classList.toggle("active", count > 0);
 
-    // تحديث محتوى الـ Drawer إن كان مفتوحاً
     var drawer = document.getElementById("cart-drawer");
     if (drawer && drawer.style.display !== "none") {
       renderCartDrawerBody();
     }
   }
 
-  /** ابحث عن صورة العنصر من بيانات المنيو باستخدام item.id */
   function findItemImage(cartEntry) {
     var baseId = cartEntry.id;
     for (var ci = 0; ci < MENU_DATA.categories.length; ci++) {
@@ -179,7 +166,6 @@
     return PLACEHOLDER_IMG;
   }
 
-  /** ارسم محتوى Drawer السلة */
   function renderCartDrawerBody() {
     var body = document.getElementById("cart-drawer-body");
     var footer = document.getElementById("cart-drawer-footer");
@@ -231,7 +217,6 @@
 
     if (totalEl) totalEl.textContent = total + " ج.م";
 
-    // ربط أحداث الأزرار
     body.querySelectorAll(".cart-qty-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var idx = parseInt(this.dataset.index, 10);
@@ -259,7 +244,6 @@
     });
   }
 
-  /** مزامنة رقم التواصل من Drawer إلى حقل الـ cart-bar */
   function syncDrawerContact() {
     var drawerInput = document.getElementById("user-contact-drawer");
     var mainInput = document.getElementById("user-contact");
@@ -268,7 +252,6 @@
     }
   }
 
-  /** فتح Drawer السلة */
   function openCartDrawer() {
     var drawer = document.getElementById("cart-drawer");
     if (!drawer) return;
@@ -277,7 +260,6 @@
     document.body.style.overflow = "hidden";
   }
 
-  /** إغلاق Drawer السلة */
   function closeCartDrawer() {
     var drawer = document.getElementById("cart-drawer");
     if (!drawer) return;
@@ -297,28 +279,36 @@
   }
 
   function sendOrderToWhatsApp() {
-    if (!cart.length) {
-      return;
-    }
-    
-    // فتح مربع الحوار بدل التحويل المباشر للواتس
+    if (!cart.length) return;
     window.openDeliveryModal();
   }
 
-  // متغير مؤقت لحفظ بيانات الطلب ريثما يختار المنطقة
+  // متغير مؤقت لحفظ الملاحظات
   var _pendingOrderNotes = '';
 
   // دالة تأكيد الطلب من مربع الحوار
   window.confirmOrderToWhatsApp = function() {
-  if (!cart.length) return;
+    if (!cart.length) return;
 
-  // ← إجباري رقم التليفون
-  var contactInput = document.getElementById('user-contact') ||
-                     document.getElementById('user-contact-drawer');
-  if (!contactInput || !contactInput.value.trim()) {
-    alert('من فضلك ادخل رقم التواصل أولاً');
-    return;
-  }
+    var contactInput = document.getElementById('user-contact') ||
+                       document.getElementById('user-contact-drawer');
+    if (!contactInput || !contactInput.value.trim()) {
+      alert('من فضلك ادخل رقم التواصل أولاً');
+      return;
+    }
+
+    _pendingOrderNotes = document.getElementById('order-notes') ?
+                         document.getElementById('order-notes').value.trim() : '';
+
+    window.closeDeliveryModal();
+
+    var deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+    if (deliveryType === 'delivery') {
+      window.openAreaModal();
+    } else {
+      window.finalizeOrderWithArea(null, 0);
+    }
+  };
 
   // دالة إرسال الطلب النهائي بعد اختيار المنطقة
   window.finalizeOrderWithArea = function(area, deliveryFee) {
@@ -330,14 +320,10 @@
 
     var grandTotal = itemsTotal + (deliveryFee || 0);
 
-    var messageLines = [
-      "🛒 طلب جديد من قائمة لذة الملوك:",
-      "",
-    ];
+    var messageLines = ["🛒 طلب جديد من قائمة لذة الملوك:", ""];
 
     cart.forEach(function (entry) {
-      var line = "• " + entry.name + " × " + entry.quantity + " = " + ((entry.price || 0) * entry.quantity) + " ج.م";
-      messageLines.push(line);
+      messageLines.push("• " + entry.name + " × " + entry.quantity + " = " + ((entry.price || 0) * entry.quantity) + " ج.م");
     });
 
     messageLines.push("");
@@ -355,11 +341,8 @@
     var orderNumber = getNextOrderNumber();
     messageLines.push("🔢 رقم الطلب: " + orderNumber);
 
-    if (els.userContact) {
-      var contactValue = els.userContact.value.trim();
-      if (contactValue) {
-        messageLines.push("📞 رقم التواصل: " + contactValue);
-      }
+    if (els.userContact && els.userContact.value.trim()) {
+      messageLines.push("📞 رقم التواصل: " + els.userContact.value.trim());
     }
 
     if (_pendingOrderNotes) {
@@ -368,9 +351,7 @@
     }
 
     var encodedMessage = encodeURIComponent(messageLines.join("\n"));
-    var whatsappUrl = "https://wa.me/201034352138?text=" + encodedMessage;
-
-    window.open(whatsappUrl, "_blank");
+    window.open("https://wa.me/201034352138?text=" + encodedMessage, "_blank");
   };
 
   /** Build a menu card element */
@@ -385,7 +366,6 @@
       : "";
     var availableSizes = getAvailableSizes(item);
     var defaultSize = getDefaultSize(item);
-    var itemPrice = getPriceValue(item);
     var sizePickerHtml = availableSizes.length
       ? '<div class="size-picker" role="group" aria-label="اختيار الحجم">' +
         availableSizes.map(function (size) {
@@ -397,11 +377,10 @@
 
     article.innerHTML =
       '<div class="card-image-wrap">' +
-      '<!-- ضع هنا صورة الصنف -->' +
       '<img src="' + resolveImageSrc(item.image) + '" alt="' + displayName + '" loading="lazy" decoding="async" class="card-image">' +
       "</div>" +
       '<div class="card-body">' +
-      "<h3 class=\"card-title\">" + displayName + "</h3>" +
+      '<h3 class="card-title">' + displayName + "</h3>" +
       descHtml +
       '<p class="card-price">' + formatPrice(item) + "</p>" +
       sizePickerHtml +
@@ -424,11 +403,9 @@
         if (selectedSizeBtn) {
           selectedSize = selectedSizeBtn.dataset.size;
         }
-
         var cartName = getCartItemName(item, category, selectedSize);
         var cartPrice = getPriceForSize(item, selectedSize);
         var cartKey = item.id + (selectedSize ? "-" + selectedSize : "");
-
         addToCart(item.id, cartName, cartPrice, { key: cartKey });
       });
     }
@@ -448,13 +425,11 @@
     return article;
   }
 
-  /** Render menu items into grid */
   function renderItems(categoryId, itemsOverride) {
     var category = getCategory(categoryId);
     if (!category) return;
 
     var items = itemsOverride || category.items;
-    /* Hide unavailable items from public menu */
     items = items.filter(function (item) {
       return item.available !== false;
     });
@@ -484,7 +459,6 @@
     els.menuGrid.appendChild(fragment);
   }
 
-  /** Switch active category with fade transition */
   function switchCategory(id) {
     if (id === activeCategoryId) return;
     activeCategoryId = id;
@@ -513,7 +487,6 @@
     }, 180);
   }
 
-  /** Filter items by search query within active category */
   function filterAndRender(query) {
     var category = getCategory(activeCategoryId);
     if (!category) return;
@@ -527,7 +500,6 @@
     renderItems(activeCategoryId, filtered);
   }
 
-  /** Build category navigation buttons */
   function renderCategories() {
     els.categoryNav.innerHTML = "";
     var fragment = document.createDocumentFragment();
@@ -553,7 +525,6 @@
     renderItems(activeCategoryId);
   }
 
-  /** Populate header and footer from data */
   function initHeader() {
     var r = MENU_DATA.restaurant;
     if (els.restaurantName) els.restaurantName.textContent = r.name;
@@ -581,7 +552,6 @@
     }
   }
 
-  /** Set social link hrefs */
   function initSocialLinks() {
     if (SOCIAL_LINKS.whatsapp) {
       els.whatsappBtn.href = SOCIAL_LINKS.whatsapp;
@@ -602,7 +572,6 @@
     }
   }
 
-  /** Get active daily offer, preferring admin localStorage override over data.js */
   function getDailyOffer() {
     try {
       var raw = localStorage.getItem("admin_daily_offer");
@@ -610,15 +579,12 @@
         var parsed = JSON.parse(raw);
         if (parsed && typeof parsed === "object") return parsed;
       }
-    } catch (e) {
-      /* ignore malformed localStorage value, fall back to data.js */
-    }
+    } catch (e) {}
 
     if (typeof DAILY_OFFER !== "undefined") return DAILY_OFFER;
     return null;
   }
 
-  /** Render the daily offer banner, or hide it if no active offer */
   function initDailyOffer() {
     if (!els.dailyOfferBanner) return;
 
@@ -658,7 +624,6 @@
     els.dailyOfferBanner.classList.remove("hidden");
   }
 
-  /** Search input handler with debounce */
   function initSearch() {
     els.searchInput.addEventListener("input", function (e) {
       clearTimeout(searchTimeout);
@@ -673,7 +638,6 @@
     });
   }
 
-  /** Back to top button visibility and scroll */
   function initBackToTop() {
     window.addEventListener("scroll", function () {
       if (window.scrollY > 400) {
@@ -688,7 +652,6 @@
     });
   }
 
-  /** Scroll active category button into view */
   function scrollActiveCategoryIntoView() {
     var active = els.categoryNav.querySelector(".cat-btn.active");
     if (active) {
@@ -696,7 +659,6 @@
     }
   }
 
-  /** Initialize application */
   function init() {
     initHeader();
     initSocialLinks();
@@ -716,7 +678,7 @@
   window.openCartDrawer = openCartDrawer;
   window.closeCartDrawer = closeCartDrawer;
   window.syncDrawerContact = syncDrawerContact;
-  window._getCart = function() { return cart; }; // ← أضف السطر ده
+  window._getCart = function() { return cart; };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
