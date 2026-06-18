@@ -15,7 +15,7 @@
 
 // ─── Override finalizeOrderWithArea ──────────────────────────────────────────
 // بعد ما يتحمل main.js، هنعدل الدالة دي
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('load', function () {
 
   // نحتفظ بالدالة الأصلية للواتساب
   const _originalFinalize = window.finalizeOrderWithArea;
