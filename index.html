@@ -292,6 +292,68 @@
         if (window.closeCartDrawer) window.closeCartDrawer();
       }
     });
+
+    <!-- popup تتبع الطلب -->
+<div id="track-modal" style="display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:2rem; max-width:380px; width:90%; max-height:80vh; overflow-y:auto; font-family:'Cairo',sans-serif;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2 style="color:#800000; font-size:1.2rem; font-weight:900;">📦 تتبع طلبك</h2>
+      <button onclick="closeTrackModal()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#666;">×</button>
+    </div>
+    <div id="track-content">
+      <div style="text-align:center; color:#888;">جاري تحميل طلباتك...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATUS_AR = {
+  pending:   { label: '⏳ جاري استلام طلبك',  color: '#f59e0b', bg: '#fef3c7' },
+  accepted:  { label: '✅ تم قبول طلبك',       color: '#10b981', bg: '#d1fae5' },
+  preparing: { label: '👨‍🍳 جاري تحضير طلبك',  color: '#3b82f6', bg: '#dbeafe' },
+  ready:     { label: '🚀 طلبك جاهز',          color: '#8b5cf6', bg: '#ede9fe' },
+  completed: { label: '✔️ تم التسليم',          color: '#6b7280', bg: '#f3f4f6' },
+  rejected:  { label: '❌ تم رفض الطلب',       color: '#ef4444', bg: '#fee2e2' },
+};
+
+async function trackOrder(phone) {
+  const modal = document.getElementById('track-modal');
+  const content = document.getElementById('track-content');
+  modal.style.display = 'flex';
+  content.innerHTML = '<div style="text-align:center; color:#888; padding:2rem;">جاري التحميل...</div>';
+
+  const orders = await FirebaseDB.getOrdersByPhone(phone);
+
+  if (!orders.length) {
+    content.innerHTML = '<div style="text-align:center; color:#888; padding:2rem;">لا توجد طلبات بهذا الرقم</div>';
+    return;
+  }
+
+  content.innerHTML = orders.map(o => {
+    const st = STATUS_AR[o.status] || STATUS_AR.pending;
+    const items = o.items.map(i => `<li style="padding:0.3rem 0; border-bottom:1px solid #eee;">${i.name} × ${i.quantity} — ${i.subtotal} ج.م</li>`).join('');
+    return `
+      <div style="background:#f9f9f9; border-radius:12px; padding:1rem; margin-bottom:1rem; border:1px solid #eee;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <strong style="color:#800000;">طلب #${o.orderNumber}</strong>
+          <span style="background:${st.bg}; color:${st.color}; padding:0.3rem 0.8rem; border-radius:50px; font-size:0.85rem; font-weight:700;">${st.label}</span>
+        </div>
+        <ul style="list-style:none; padding:0; margin:0 0 0.75rem; font-size:0.875rem;">
+          ${items}
+        </ul>
+        <div style="font-weight:700; color:#800000; text-align:left;">الإجمالي: ${o.grandTotal} ج.م</div>
+      </div>`;
+  }).join('');
+}
+
+function closeTrackModal() {
+  document.getElementById('track-modal').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeTrackModal();
+});
+</script>
   </script>
    <script src="firebase-orders.js"></script>
   <script src="main.js"></script>

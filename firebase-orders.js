@@ -106,21 +106,23 @@ const FirebaseDB = {
   /**
    * Real-time listener باستخدام SSE (Server-Sent Events)
    */
-  listenToOrders(callback) {
-    const url = `${FIREBASE_DB_URL}/orders.json`;
-    
-    // Polling كل 5 ثواني (Firebase REST لا يدعم SSE بدون SDK)
-    let lastData = null;
-    
-    const poll = async () => {
+async getOrdersByPhone(phone) {
+    try {
       const orders = await this.getOrders();
-      const currentData = JSON.stringify(orders);
-      
-      if (currentData !== lastData) {
-        lastData = currentData;
-        callback(orders);
-      }
-    };
+      const clean = phone.replace(/\D/g, '');
+      return orders.filter(o => {
+        const op = (o.customerPhone || '').replace(/\D/g, '');
+        return op === clean;
+      });
+    } catch (err) {
+      console.error('Firebase Error:', err);
+      return [];
+    }
+  },
+
+  listenToOrders(callback) {
+
+    
 
     poll(); // أول مرة فوراً
     const interval = setInterval(poll, 5000); // كل 5 ثواني

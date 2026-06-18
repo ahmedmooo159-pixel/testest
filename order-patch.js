@@ -51,8 +51,7 @@ window.addEventListener('load', function () {
       console.log('✅ الطلب وصل Firebase:', firebaseKey);
 
       // إظهار رسالة نجاح
-      showOrderSuccess(orderData.orderNumber);
-
+showOrderSuccess(orderData.orderNumber, customerPhone);
     } catch (err) {
       console.error('❌ Firebase Error:', err);
       // لو Firebase فشل، نكمل بالواتساب على طول
@@ -65,8 +64,7 @@ window.addEventListener('load', function () {
   };
 
   // ─── Helper: شاشة تأكيد الطلب ─────────────────────────────────────────────
-  function showOrderSuccess(orderNumber) {
-    // إنشاء overlay تأكيد
+function showOrderSuccess(orderNumber, customerPhone) {    // إنشاء overlay تأكيد
     const overlay = document.createElement('div');
     overlay.style.cssText = `
       position: fixed; inset: 0; z-index: 99999;
@@ -95,14 +93,16 @@ window.addEventListener('load', function () {
         <p style="
           font-family: 'Cairo', sans-serif;
           color: #888; font-size: 0.85rem; margin-bottom: 1.5rem;
-        ">سيتواصل معك المطعم قريباً عبر واتساب 🚀</p>
-        <button onclick="this.closest('div[style]').parentElement.remove()" style="
-          background: #800000; color: #fff;
-          border: none; border-radius: 50px;
-          padding: 0.8rem 2rem;
-          font-family: 'Cairo', sans-serif;
-          font-size: 1rem; font-weight: 700;
-          cursor: pointer; width: 100%;
+        '>سيتواصل معك المطعم قريباً عبر واتساب 🚀</p>
+<button onclick="trackOrder('${customerPhone}')" style="
+  background: #f0f0f0; color: #800000;
+  border: none; border-radius: 50px;
+  padding: 0.8rem 2rem;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; width: 100%;
+  margin-bottom: 0.5rem;
+">📦 تابع طلبك</button>
         ">حسناً 👍</button>
       </div>
       <style>

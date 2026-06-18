@@ -310,22 +310,15 @@
 
   // دالة تأكيد الطلب من مربع الحوار
   window.confirmOrderToWhatsApp = function() {
-    if (!cart.length) return;
+  if (!cart.length) return;
 
-    var deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
-    _pendingOrderNotes = document.getElementById('order-notes').value.trim();
-
-    // إغلاق مربع التوصيل
-    window.closeDeliveryModal();
-
-    if (deliveryType === 'delivery') {
-      // افتح نافذة اختيار المنطقة
-      window.openAreaModal();
-    } else {
-      // استلام من المحل — أرسل مباشرةً بدون ديليفري
-      window.finalizeOrderWithArea(null, 0);
-    }
-  };
+  // ← إجباري رقم التليفون
+  var contactInput = document.getElementById('user-contact') ||
+                     document.getElementById('user-contact-drawer');
+  if (!contactInput || !contactInput.value.trim()) {
+    alert('من فضلك ادخل رقم التواصل أولاً');
+    return;
+  }
 
   // دالة إرسال الطلب النهائي بعد اختيار المنطقة
   window.finalizeOrderWithArea = function(area, deliveryFee) {
